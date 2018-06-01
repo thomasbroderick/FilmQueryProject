@@ -17,10 +17,10 @@ public class FilmQueryApp {
 		app.launch();
 	}
 
-//	private void test() throws SQLException {
-//		Film film = db.getFilmById(900);
-//		System.out.println(film);
-//	}
+	// private void test() throws SQLException {
+	// Film film = db.getFilmById(900);
+	// System.out.println(film);
+	// }
 
 	private void launch() throws SQLException {
 		Scanner input = new Scanner(System.in);
@@ -68,8 +68,17 @@ public class FilmQueryApp {
 
 	}
 
-	private void lookUpByString(Scanner input) {
-		System.out.println("In lookUpByString");
+	private void lookUpByString(Scanner input) throws SQLException {
+		String searchInput = "";
+		System.out.println("Text to search for: ");
+		searchInput = input.nextLine();
+		Film f = db.getFilmBySearch(searchInput);
+
+		if (f == null) {
+			System.out.println("Film not found");
+		} else {
+			System.out.println(f.limitedString());
+		}
 
 	}
 
@@ -80,12 +89,11 @@ public class FilmQueryApp {
 		System.out.println("What is the film's ID #?");
 		filmIdString = input.nextLine();
 		filmId = Integer.parseInt(filmIdString);
-		
+
 		Film f = db.getFilmById(filmId);
 		if (f == null) {
 			System.out.println("Film not found");
-		}
-		else {
+		} else {
 			System.out.println(f.limitedString());
 		}
 
