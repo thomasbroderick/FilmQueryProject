@@ -1,7 +1,6 @@
 package com.skilldistillery.filmquery.app;
 
 import java.sql.SQLException;
-import java.util.InputMismatchException;
 import java.util.Scanner;
 
 import com.skilldistillery.filmquery.database.DatabaseAccessor;
@@ -18,12 +17,12 @@ public class FilmQueryApp {
 		app.launch();
 	}
 
-	private void test() throws SQLException {
-		Film film = db.getFilmById(900);
-		System.out.println(film);
-	}
+//	private void test() throws SQLException {
+//		Film film = db.getFilmById(900);
+//		System.out.println(film);
+//	}
 
-	private void launch() {
+	private void launch() throws SQLException {
 		Scanner input = new Scanner(System.in);
 
 		startUserInterface(input);
@@ -31,12 +30,12 @@ public class FilmQueryApp {
 		input.close();
 	}
 
-	private void startUserInterface(Scanner input) {
+	private void startUserInterface(Scanner input) throws SQLException {
 		String choiceString = "";
 		int choice = 0;
 		// Initial menu for user choice
 		do {
-			
+
 			System.out.println("Welcome to Blockbuster Simulator BS-9000");
 			System.out.println("Please choose an option from the menu");
 			System.out.println("1. Look up a film by ID #");
@@ -52,14 +51,14 @@ public class FilmQueryApp {
 			} catch (NumberFormatException e) {
 				System.out.println("That is not a valid option");
 				continue;
-				
+
 			}
 			switch (choice) {
 			case 1:
-				lookUpById();
+				lookUpById(input);
 				break;
 			case 2:
-				lookUpByString();
+				lookUpByString(input);
 				break;
 			case 3:
 				System.out.println("Goodbye");
@@ -69,13 +68,26 @@ public class FilmQueryApp {
 
 	}
 
-	private void lookUpByString() {
+	private void lookUpByString(Scanner input) {
 		System.out.println("In lookUpByString");
 
 	}
 
-	private void lookUpById() {
-		System.out.println("In lookUpById");
+	private void lookUpById(Scanner input) throws SQLException {
+		String filmIdString = "";
+		int filmId = 0;
+
+		System.out.println("What is the film's ID #?");
+		filmIdString = input.nextLine();
+		filmId = Integer.parseInt(filmIdString);
+		
+		Film f = db.getFilmById(filmId);
+		if (f == null) {
+			System.out.println("Film not found");
+		}
+		else {
+			System.out.println(f.limitedString());
+		}
 
 	}
 }

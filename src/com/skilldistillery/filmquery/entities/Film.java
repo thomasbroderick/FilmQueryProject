@@ -188,6 +188,11 @@ public class Film {
 		return builder.toString();
 	}
 	
-	
+	public String limitedString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("Film").append(" title=").append(title).append(", description=")
+		.append(description).append(", releaseYear=").append(releaseYear).append(", rating=").append(rating);
+		return builder.toString();
+	}
 	
 }
