@@ -99,9 +99,9 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 		List<Film> films = new ArrayList<>();
 		Film film = null;
 		Connection conn = DriverManager.getConnection(URL, "student", "student");
-		String sql = "SELECT id, title, description, release_year, language_id, rental_duration,"
-				+ " rental_rate, length, replacement_cost, rating, special_features FROM film "
-				+ "WHERE title LIKE ? OR description LIKE ?";
+		String sql = "SELECT film.id, title, description, release_year, language_id, rental_duration,"
+				+ " rental_rate, length, replacement_cost, rating, special_features, language.name FROM film "
+				+ "JOIN language ON film.language_id = language.id WHERE title LIKE ? OR description LIKE ?";
 		PreparedStatement stmt = conn.prepareStatement(sql);
 		stmt.setString(1, "%" + searchInput + "%");
 		stmt.setString(2, "%" + searchInput + "%");
@@ -121,6 +121,7 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 			film.setRating(filmResult.getString(10));
 			film.setSpecialFeatures(filmResult.getString(11));
 			film.setActors(getActorsByFilmId(film.getId()));
+			film.setLanguage(filmResult.getString(12));
 			films.add(film);
 		}
 		filmResult.close();
