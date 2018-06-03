@@ -95,7 +95,8 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 	}
 
 	@Override
-	public Film getFilmBySearch(String searchInput) throws SQLException {
+	public List<Film> getFilmBySearch(String searchInput) throws SQLException {
+		List<Film> films = new ArrayList<>();
 		Film film = null;
 		Connection conn = DriverManager.getConnection(URL, "student", "student");
 		String sql = "SELECT id, title, description, release_year, language_id, rental_duration,"
@@ -105,7 +106,7 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 		stmt.setString(1, "%" + searchInput + "%");
 		stmt.setString(2, "%" + searchInput + "%");
 		ResultSet filmResult = stmt.executeQuery();
-		if (filmResult.next()) {
+		while (filmResult.next()) {
 			film = new Film(); // Create the object
 			// Here is our mapping of query columns to our object fields:
 			film.setId(filmResult.getInt(1));
@@ -119,12 +120,13 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 			film.setReplacementCost(filmResult.getDouble(9));
 			film.setRating(filmResult.getString(10));
 			film.setSpecialFeatures(filmResult.getString(11));
-			film.setActors(getActorsByFilmId(film.getId())); // An Actor has Films
+			film.setActors(getActorsByFilmId(film.getId()));
+			films.add(film);
 		}
 		filmResult.close();
 	    stmt.close();
 	    conn.close();
-	    return film;
+	    return films;
 	}
 
 }
