@@ -76,7 +76,7 @@ public class FilmQueryApp {
 		searchInput = input.nextLine();
 		List<Film> f = db.getFilmBySearch(searchInput);
 
-		if (f == null) {
+		if (f.size() == 0) {
 			System.out.println("Film not found");
 		} else if (f.size() == 1) {
 			Film singleFilm = f.get(0);

@@ -16,6 +16,7 @@ public class Film {
 	private String specialFeatures;
 	private List<Actor> actors;
 	private String language;
+	private String category;
 
 	public int getId() {
 		return id;
@@ -111,7 +112,7 @@ public class Film {
 
 	public Film(int id, String title, String description, int releaseYear, int languageId, int rentalDuration,
 			double rentalRate, int length, double replacementCost, String rating, String specialFeatures,
-			List<Actor> actors, String language) {
+			List<Actor> actors, String language, String category) {
 		super();
 		this.id = id;
 		this.title = title;
@@ -126,6 +127,7 @@ public class Film {
 		this.specialFeatures = specialFeatures;
 		this.actors = actors;
 		this.language = language;
+		this.category = category;
 	}
 
 	@Override
@@ -213,7 +215,7 @@ public class Film {
 				.append(rentalRate).append(", length=").append(length).append(", replacementCost=")
 				.append(replacementCost).append(", rating=").append(rating).append(", specialFeatures=")
 				.append(specialFeatures).append(", language=")
-				.append(language).append(", actors=").append(actors).append("]");
+				.append(language).append(", actors=").append(actors).append(", category=").append(category).append("]");
 		return builder.toString();
 	}
 
@@ -221,7 +223,7 @@ public class Film {
 		StringBuilder builder = new StringBuilder();
 		builder.append("Film").append(" title=").append(title).append(", description=").append(description)
 				.append(", releaseYear=").append(releaseYear).append(", rating=").append(rating).append(", language=")
-				.append(language).append(", actors=").append(actors).append("]");
+				.append(language).append(", category=").append(category).append(", actors=").append(actors).append("]");
 		return builder.toString();
 	}
 
@@ -231,6 +233,14 @@ public class Film {
 
 	public void setLanguage(String language) {
 		this.language = language;
+	}
+
+	public String getCategory() {
+		return category;
+	}
+
+	public void setCategory(String category) {
+		this.category = category;
 	}
 
 }
