@@ -212,7 +212,8 @@ public class Film {
 				.append(languageId).append(", rentalDuration=").append(rentalDuration).append(", rentalRate=")
 				.append(rentalRate).append(", length=").append(length).append(", replacementCost=")
 				.append(replacementCost).append(", rating=").append(rating).append(", specialFeatures=")
-				.append(specialFeatures).append(", actors=").append(actors).append("]");
+				.append(specialFeatures).append(", language=")
+				.append(language).append(", actors=").append(actors).append("]");
 		return builder.toString();
 	}
 

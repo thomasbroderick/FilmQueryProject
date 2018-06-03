@@ -11,11 +11,13 @@ import com.skilldistillery.filmquery.entities.Film;
 public class FilmQueryApp {
 
 	DatabaseAccessor db = new DatabaseAccessorObject();
+	Scanner input = new Scanner(System.in);
 
 	public static void main(String[] args) throws SQLException {
 		FilmQueryApp app = new FilmQueryApp();
 		// app.test();
 		app.launch();
+
 	}
 
 	// private void test() throws SQLException {
@@ -24,14 +26,13 @@ public class FilmQueryApp {
 	// }
 
 	private void launch() throws SQLException {
-		Scanner input = new Scanner(System.in);
 
-		startUserInterface(input);
-
+		startUserInterface();
 		input.close();
+
 	}
 
-	private void startUserInterface(Scanner input) throws SQLException {
+	private void startUserInterface() throws SQLException {
 		String choiceString = "";
 		int choice = 0;
 		// Initial menu for user choice
@@ -56,10 +57,10 @@ public class FilmQueryApp {
 			}
 			switch (choice) {
 			case 1:
-				lookUpById(input);
+				lookUpById();
 				break;
 			case 2:
-				lookUpByString(input);
+				lookUpByString();
 				break;
 			case 3:
 				System.out.println("Goodbye");
@@ -69,7 +70,7 @@ public class FilmQueryApp {
 
 	}
 
-	private void lookUpByString(Scanner input) throws SQLException {
+	private void lookUpByString() throws SQLException {
 		String searchInput = "";
 		System.out.println("Text to search for: ");
 		searchInput = input.nextLine();
@@ -77,7 +78,13 @@ public class FilmQueryApp {
 
 		if (f == null) {
 			System.out.println("Film not found");
-		} else {
+		} else if (f.size() == 1) {
+			Film singleFilm = f.get(0);
+			System.out.println(singleFilm.limitedString());
+			showSubMenu(singleFilm);
+		}
+
+		else {
 			for (Film film : f) {
 				System.out.println(film.limitedString());
 
@@ -86,7 +93,7 @@ public class FilmQueryApp {
 
 	}
 
-	private void lookUpById(Scanner input) throws SQLException {
+	private void lookUpById() throws SQLException {
 		String filmIdString = "";
 		int filmId = 0;
 
@@ -99,7 +106,28 @@ public class FilmQueryApp {
 			System.out.println("Film not found");
 		} else {
 			System.out.println(f.limitedString());
+			showSubMenu(f);
 		}
 
 	}
+
+	private void showSubMenu(Film singleFilm) {
+		String userChoice = "";
+		int userChoiceInt = 0;
+		System.out.println("Would you like to:");
+		System.out.println("1. Return to the main menu");
+		System.out.println("2. See all details for this film?");
+		userChoice = input.nextLine();
+		userChoiceInt = Integer.parseInt(userChoice);
+		switch (userChoiceInt) {
+		case 1:
+			break;
+		case 2:
+			System.out.println(singleFilm.toString());
+			break;
+		default:
+			break;
+		}
+	}
+
 }
