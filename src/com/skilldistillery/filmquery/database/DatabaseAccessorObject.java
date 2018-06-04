@@ -10,6 +10,7 @@ import java.util.List;
 
 import com.skilldistillery.filmquery.entities.Actor;
 import com.skilldistillery.filmquery.entities.Film;
+import com.skilldistillery.filmquery.entities.VHSTape;
 
 public class DatabaseAccessorObject implements DatabaseAccessor {
 	private static final String URL = "jdbc:mysql://localhost:3306/sdvid";
@@ -22,7 +23,7 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 				+ "rental_duration, rental_rate, length, replacement_cost, rating, special_features, "
 				+ "language.name, category.name FROM film JOIN language ON film.language_id = language.id "
 				+ "JOIN film_category ON film.id = film_category.film_id JOIN category ON film_category.category_id = category.id "
-				+ "WHERE film.id = ?";
+				+ " WHERE film.id = ?";
 		PreparedStatement stmt = conn.prepareStatement(sql);
 		stmt.setInt(1, filmId);
 		ResultSet filmResult = stmt.executeQuery();
@@ -43,12 +44,39 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 			film.setActors(getActorsByFilmId(film.getId()));
 			film.setLanguage(filmResult.getString(12));
 			film.setCategory(filmResult.getString(13));
+			film.setCopies(getCopiesByFilmId(film.getId()));
 		}
 		filmResult.close();
 		stmt.close();
 		conn.close();
 		return film;
 
+	}
+
+	private List<VHSTape> getCopiesByFilmId(int id) {
+		List<VHSTape> copies = new ArrayList<>();
+		try {
+			Connection conn = DriverManager.getConnection(URL, "student", "student");
+			String sql = "SELECT inventory_item.id, film_id, media_condition"
+					+ " FROM inventory_item JOIN film ON inventory_item.film_id = film.id " + " WHERE film_id = ?";
+			PreparedStatement stmt = conn.prepareStatement(sql);
+			stmt.setInt(1, id);
+			ResultSet rs = stmt.executeQuery();
+			while (rs.next()) {
+				int tapeId = rs.getInt(1);
+				int filmId = rs.getInt(2);
+				String condition = rs.getString(3);
+
+				VHSTape tape = new VHSTape(tapeId, filmId, condition);
+				copies.add(tape);
+			}
+			rs.close();
+			stmt.close();
+			conn.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return copies;
 	}
 
 	@Override
@@ -128,6 +156,7 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 			film.setActors(getActorsByFilmId(film.getId()));
 			film.setLanguage(filmResult.getString(12));
 			film.setCategory(filmResult.getString(13));
+			film.setCopies(getCopiesByFilmId(film.getId()));
 			films.add(film);
 		}
 		filmResult.close();

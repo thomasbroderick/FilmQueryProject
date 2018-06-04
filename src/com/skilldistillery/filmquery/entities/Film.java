@@ -17,6 +17,8 @@ public class Film {
 	private List<Actor> actors;
 	private String language;
 	private String category;
+	private List<VHSTape> copies;
+	
 
 	public int getId() {
 		return id;
@@ -112,7 +114,7 @@ public class Film {
 
 	public Film(int id, String title, String description, int releaseYear, int languageId, int rentalDuration,
 			double rentalRate, int length, double replacementCost, String rating, String specialFeatures,
-			List<Actor> actors, String language, String category) {
+			List<Actor> actors, String language, String category, List<VHSTape> copies) {
 		super();
 		this.id = id;
 		this.title = title;
@@ -128,6 +130,7 @@ public class Film {
 		this.actors = actors;
 		this.language = language;
 		this.category = category;
+		this.copies = copies;
 	}
 
 	@Override
@@ -215,7 +218,7 @@ public class Film {
 				.append(rentalRate).append(", length=").append(length).append(", replacementCost=")
 				.append(replacementCost).append(", rating=").append(rating).append(", specialFeatures=")
 				.append(specialFeatures).append(", language=")
-				.append(language).append(", actors=").append(actors).append(", category=").append(category).append("]");
+				.append(language).append(", actors=").append(actors).append(", category=").append(category).append(", copies=").append(copies.toString()).append("]");
 		return builder.toString();
 	}
 
@@ -223,7 +226,8 @@ public class Film {
 		StringBuilder builder = new StringBuilder();
 		builder.append("Film").append(" title=").append(title).append(", description=").append(description)
 				.append(", releaseYear=").append(releaseYear).append(", rating=").append(rating).append(", language=")
-				.append(language).append(", category=").append(category).append(", actors=").append(actors).append("]");
+				.append(language).append(", category=").append(category).append(", actors=").append(actors).append(", copies=")
+				.append(copies.toString()).append("]");
 		return builder.toString();
 	}
 
@@ -242,5 +246,15 @@ public class Film {
 	public void setCategory(String category) {
 		this.category = category;
 	}
+
+	public List<VHSTape> getCopies() {
+		return copies;
+	}
+
+	public void setCopies(List<VHSTape> copies) {
+		this.copies = copies;
+	}
+
+	
 
 }
